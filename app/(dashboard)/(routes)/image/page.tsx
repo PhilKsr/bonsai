@@ -146,7 +146,7 @@ export default function ImagePage() {
               <Loader />
             </div>
           )}
-          {images.length === 0 && !isLoading && <Empty label='No images generated.' />}
+          {!images.length && !isLoading && <Empty label='No images generated.' />}
           <div className='grid grid-cols-1 gap-4 mt-8 md:grid-cols2 lg:grid-cols-3 xl:grid-cols-4'>
             {images.map(src => (
               <Card key={src} className='overflow-hidden rounded-lg'>

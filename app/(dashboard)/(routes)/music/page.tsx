@@ -3,7 +3,7 @@
 import axios from 'axios'
 import * as z from 'zod'
 import Heading from '@/components/heading'
-import { Code } from 'lucide-react'
+import { Music } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { conversationSchema } from './types'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -11,19 +11,14 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
-import { ChatCompletionMessageParam } from 'openai/resources/index.mjs'
 import { useState } from 'react'
 import { Empty } from '@/components/empty'
 import { Loader } from '@/components/loader'
-import { cn } from '@/lib/utils'
-import { UserAvatar } from '@/components/user-avatar'
-import { BotAvatar } from '@/components/bot-avatar'
-import ReactMarkdown from 'react-markdown'
 
-export default function CodePage() {
+export default function MusicPage() {
   const router = useRouter()
 
-  const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([])
+  const [music, setMusic] = useState<string>()
 
   const form = useForm<z.infer<typeof conversationSchema>>({
     resolver: zodResolver(conversationSchema),
@@ -36,18 +31,11 @@ export default function CodePage() {
 
   const onSubmit = async (values: z.infer<typeof conversationSchema>) => {
     try {
-      const userMessage: ChatCompletionMessageParam = {
-        role: 'user',
-        content: values.prompt,
-      }
+      setMusic(undefined)
 
-      const newMessages = [...messages, userMessage]
+      const response = await axios.post('/api/music', values)
 
-      const response = await axios.post('/api/code', {
-        messages: newMessages,
-      })
-
-      setMessages(current => [...current, userMessage, response.data])
+      setMusic(response.data.audio)
 
       form.reset()
     } catch (error: unknown) {
@@ -61,11 +49,11 @@ export default function CodePage() {
   return (
     <div>
       <Heading
-        title='Code Generation'
-        description='Generate code using descriptive text.'
-        icon={Code}
-        iconColor='text-green-700'
-        bgColor='bg-green-700/10'
+        title='Music Generation'
+        description='Turn your prompt into music.'
+        icon={Music}
+        iconColor='text-emerald-500'
+        bgColor='bg-emerald-500/10'
       />
       <div className='px-4 lg:px-8'>
         <div>
@@ -81,7 +69,7 @@ export default function CodePage() {
                       <Input
                         className='border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent'
                         disabled={isLoading}
-                        placeholder='Simple toggle button using react hooks.'
+                        placeholder='Piano solo'
                         {...field}
                       />
                     </FormControl>
@@ -102,31 +90,12 @@ export default function CodePage() {
               <Loader />
             </div>
           )}
-          {!messages.length && !isLoading && <Empty label='No code generated.' />}
-          <div className='flex flex-col-reverse gap-y-4'>
-            {messages.map(message => (
-              <div
-                key={String(message.content)}
-                className={cn(
-                  'p-8 w-full flex items-start gap-x-8 rounded-lg',
-                  message.role === 'user' ? 'bg-white border border-black/10' : 'bg-muted'
-                )}>
-                {message.role === 'user' ? <UserAvatar /> : <BotAvatar />}
-                <ReactMarkdown
-                  components={{
-                    pre: ({ node, ...props }) => (
-                      <div className='w-full p-2 my-2 overflow-auto rounded-lg bg-black/10'>
-                        <pre {...props} />
-                      </div>
-                    ),
-                    code: ({ node, ...props }) => <code {...props} className='p-1 rounded-lg bg-black/10' />,
-                  }}
-                  className='overflow-hidden text-sm leading-7'>
-                  {String(message.content) || ''}
-                </ReactMarkdown>
-              </div>
-            ))}
-          </div>
+          {!music && !isLoading && <Empty label='No music generated.' />}
+          {music && (
+            <audio controls className='w-full mt-8'>
+              <source src={music} />
+            </audio>
+          )}
         </div>
       </div>
     </div>
