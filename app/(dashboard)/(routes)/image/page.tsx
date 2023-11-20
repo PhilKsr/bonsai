@@ -1,6 +1,6 @@
 'use client'
 
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import * as z from 'zod'
 import Heading from '@/components/heading'
 import { Download, ImageIcon } from 'lucide-react'
@@ -17,8 +17,11 @@ import { Loader } from '@/components/loader'
 import { Select, SelectContent, SelectTrigger, SelectValue, SelectItem } from '@/components/ui/select'
 import { Card, CardFooter } from '@/components/ui/card'
 import Image from 'next/image'
+import { useProModal } from '@/app/hooks/use-pro-modal'
 
 export default function ImagePage() {
+  const proModal = useProModal()
+
   const router = useRouter()
 
   const [images, setImages] = useState<string[]>([])
@@ -46,8 +49,11 @@ export default function ImagePage() {
 
       form.reset()
     } catch (error: unknown) {
-      //TODO: Open Pro Model
-      console.log(error)
+      const catchedError = error as AxiosError
+
+      if (catchedError.response?.status === 403) {
+        proModal.onOpen()
+      }
     } finally {
       router.refresh()
     }

@@ -1,6 +1,6 @@
 'use client'
 
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import * as z from 'zod'
 import Heading from '@/components/heading'
 import { MessageSquare } from 'lucide-react'
@@ -18,8 +18,11 @@ import { Loader } from '@/components/loader'
 import { cn } from '@/lib/utils'
 import { UserAvatar } from '@/components/user-avatar'
 import { BotAvatar } from '@/components/bot-avatar'
+import { useProModal } from '@/app/hooks/use-pro-modal'
 
 export default function ConversationPage() {
+  const proModal = useProModal()
+
   const router = useRouter()
 
   const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([])
@@ -50,8 +53,11 @@ export default function ConversationPage() {
 
       form.reset()
     } catch (error: unknown) {
-      //TODO: Open Pro Model
-      console.log(error)
+      const catchedError = error as AxiosError
+
+      if (catchedError.response?.status === 403) {
+        proModal.onOpen()
+      }
     } finally {
       router.refresh()
     }

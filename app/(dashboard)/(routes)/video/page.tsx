@@ -1,9 +1,9 @@
 'use client'
 
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import * as z from 'zod'
 import Heading from '@/components/heading'
-import { Music, VideoIcon } from 'lucide-react'
+import { VideoIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { conversationSchema } from './types'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -14,8 +14,11 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Empty } from '@/components/empty'
 import { Loader } from '@/components/loader'
+import { useProModal } from '@/app/hooks/use-pro-modal'
 
 export default function VideoPage() {
+  const proModal = useProModal()
+
   const router = useRouter()
 
   const [video, setVideo] = useState<string>()
@@ -39,8 +42,11 @@ export default function VideoPage() {
 
       form.reset()
     } catch (error: unknown) {
-      //TODO: Open Pro Model
-      console.log(error)
+      const catchedError = error as AxiosError
+
+      if (catchedError.response?.status === 403) {
+        proModal.onOpen()
+      }
     } finally {
       router.refresh()
     }
