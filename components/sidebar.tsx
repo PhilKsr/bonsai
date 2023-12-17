@@ -1,4 +1,4 @@
-'use-client'
+'use client'
 
 import Link from 'next/link'
 import Image from 'next/image'
@@ -10,6 +10,7 @@ import FreeCounter from '@/components/free-counter'
 
 type Props = {
   apiLimitCount: number
+  isPro: boolean
 }
 
 const montserrat = Montserrat({ weight: '600', subsets: ['latin'] })
@@ -58,7 +59,7 @@ const routes = [
   },
 ]
 
-export default function Sidebar({ apiLimitCount = 0 }: Props) {
+export default function Sidebar({ apiLimitCount = 0, isPro = false }: Props) {
   const pathname = usePathname()
 
   return (
@@ -88,7 +89,7 @@ export default function Sidebar({ apiLimitCount = 0 }: Props) {
         </div>
       </div>
 
-      <FreeCounter apiLimitCount={apiLimitCount} />
+      <FreeCounter apiLimitCount={apiLimitCount} isPro={isPro} />
     </div>
   )
 }
