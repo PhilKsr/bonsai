@@ -1,6 +1,6 @@
 'use client'
 
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import * as z from 'zod'
 import Heading from '@/components/heading'
 import { Code } from 'lucide-react'
@@ -19,8 +19,12 @@ import { cn } from '@/lib/utils'
 import { UserAvatar } from '@/components/user-avatar'
 import { BotAvatar } from '@/components/bot-avatar'
 import ReactMarkdown from 'react-markdown'
+import { useProModal } from '@/app/hooks/use-pro-modal'
+import toast from 'react-hot-toast'
 
 export default function CodePage() {
+  const proModal = useProModal()
+
   const router = useRouter()
 
   const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([])
@@ -51,8 +55,13 @@ export default function CodePage() {
 
       form.reset()
     } catch (error: unknown) {
-      //TODO: Open Pro Model
-      console.log(error)
+      const catchedError = error as AxiosError
+
+      if (catchedError.response?.status === 403) {
+        proModal.onOpen()
+      } else {
+        toast.error('Something went wrong.')
+      }
     } finally {
       router.refresh()
     }
