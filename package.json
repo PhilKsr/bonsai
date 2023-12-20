@@ -5,11 +5,11 @@
   "scripts": {
     "build": "next build",
     "clean": "rimraf dist node_modules",
-    "clean:install": "npm run clean && npm install",
+    "clean:install": "pnpm run clean && pnpm install",
     "dev": "next dev",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
-    "postinstall": "prisma generate",
+    "postinstall": "npx only-allow pnpm && prisma generate",
     "lint": "next lint",
     "sort-package-json": "sort-package-json",
     "start": "next start"
@@ -46,7 +46,7 @@
     "zustand": "^4.4.6"
   },
   "devDependencies": {
-    "typescript": "^5.1.6",
+    "typescript": "^5.2.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
