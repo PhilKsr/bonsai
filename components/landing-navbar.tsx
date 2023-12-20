@@ -16,7 +16,7 @@ export default function LandingNavbar() {
     <nav className='flex items-center justify-between p-4 bg-transparent'>
       <Link href='/' className='flex items-center'>
         <div className='relative w-8 h-8 mr-4'>
-          <Image alt='Logo' src={'/bonsai.png'} fill />
+          <Image alt='Logo' src='/bonsai.png' fill />
         </div>
 
         <h1 className={cn('text-2xl font-bold text-white', font.className)}>Bonsai</h1>
