@@ -12,22 +12,43 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Install pnpm
+      - name: 🔧 Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: latest
 
-      - name: Setup Node
+      - name: 🔧 Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'pnpm'
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: pnpm install
 
-      - name: Run linting
+      - name: 📦 Run linting
         run: pnpm run lint
+
+  security:
+    name: Vulnerability scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL'
+
+      - name: Upload results
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
 
   build:
     name: Build
@@ -36,19 +57,19 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Install pnpm
+      - name: 🔧 Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: latest
 
-      - name: Setup Node
+      - name: 🔧 Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'pnpm'
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: pnpm install
 
-      - name: Build
+      - name: 📦 Build
         run: pnpm run build
