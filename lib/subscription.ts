@@ -1,14 +1,14 @@
-import { auth } from '@clerk/nextjs'
+import { auth } from "@clerk/nextjs";
 
-import prismadb from '@/lib/prismadb'
+import prismadb from "@/lib/prismadb";
 
-const DAY_IN_MS = 86_400_000
+const DAY_IN_MS = 86_400_000;
 
 export async function checkSubscription() {
-  const { userId } = auth()
+  const { userId } = auth();
 
   if (!userId) {
-    return false
+    return false;
   }
 
   const userSubscription = await prismadb.userSubscription.findUnique({
@@ -21,13 +21,16 @@ export async function checkSubscription() {
       stripeCustomerId: true,
       stripePriceId: true,
     },
-  })
+  });
 
   if (!userSubscription) {
-    return false
+    return false;
   }
 
-  const isValid = userSubscription.stripePriceId && userSubscription.stripeCurrentPeriodEnd?.getTime()! + DAY_IN_MS > Date.now()
+  const isValid =
+    userSubscription.stripePriceId &&
+    userSubscription.stripeCurrentPeriodEnd?.getTime()! + DAY_IN_MS >
+      Date.now();
 
-  return !!isValid
+  return !!isValid;
 }
