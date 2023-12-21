@@ -9,7 +9,7 @@
     "dev": "next dev",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
-    "postinstall": "npx only-allow pnpm && prisma generate",
+    "postinstall": "npx only-allow pnpm && husky install && prisma generate",
     "lint": "next lint",
     "sort-package-json": "sort-package-json",
     "start": "next start"
