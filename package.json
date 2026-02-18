@@ -10,7 +10,7 @@
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "postinstall": "npx only-allow pnpm && husky install && prisma generate",
-    "lint": "next lint",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "sort-package-json": "sort-package-json",
     "start": "next start"
   },
