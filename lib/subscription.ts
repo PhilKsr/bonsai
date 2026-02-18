@@ -1,11 +1,11 @@
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 import prismadb from "@/lib/prismadb";
 
 const DAY_IN_MS = 86_400_000;
 
 export async function checkSubscription() {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return false;

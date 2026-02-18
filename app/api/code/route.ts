@@ -1,6 +1,6 @@
 import { checkApiLimit, increaseApiLimit } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subscription";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
@@ -17,7 +17,7 @@ const instructionMessage: ChatCompletionMessageParam = {
 
 export async function POST(req: Request) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     const body = await req.json();
     const { messages } = body;
 
