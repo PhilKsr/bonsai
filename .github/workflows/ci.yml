@@ -16,12 +16,12 @@ jobs:
       - name: 🔧 Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: latest
+          version: 10.10.0
 
       - name: 🔧 Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20.9.0'
           cache: 'pnpm'
 
       - name: 📦 Install dependencies
@@ -61,12 +61,12 @@ jobs:
       - name: 🔧 Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: latest
+          version: 10.10.0
 
       - name: 🔧 Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20.9.0'
           cache: 'pnpm'
 
       - name: 📦 Install dependencies
