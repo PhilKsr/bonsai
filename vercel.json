@@ -1,0 +1,18 @@
+{
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 10
+    }
+  },
+  "env": {
+    "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "@clerk_publishable_key",
+    "CLERK_SECRET_KEY": "@clerk_secret_key",
+    "OPENAI_API_KEY": "@openai_api_key",
+    "REPLICATE_API_TOKEN": "@replicate_api_token",
+    "DATABASE_URL": "@database_url",
+    "DIRECT_URL": "@direct_url",
+    "STRIPE_API_KEY": "@stripe_api_key",
+    "STRIPE_WEBHOOK_SECRET": "@stripe_webhook_secret",
+    "NEXT_PUBLIC_APP_URL": "@next_public_app_url"
+  }
+}
